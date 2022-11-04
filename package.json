@@ -1,0 +1,25 @@
+{
+  "name": "qywx-node",
+  "version": "1.0.0",
+  "description": "企业微信API客户端",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shuaidd/qywx-node.git"
+  },
+  "keywords": [
+    "nodejs",
+    "qywx",
+    "企业微信",
+    "API"
+  ],
+  "author": "ddshuai",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shuaidd/qywx-node/issues"
+  },
+  "homepage": "https://github.com/shuaidd/qywx-node#readme"
+}
