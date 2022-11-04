@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/shuaidd/qywx-node/issues"
   },
-  "homepage": "https://github.com/shuaidd/qywx-node#readme"
+  "homepage": "https://github.com/shuaidd/qywx-node#readme",
+  "dependencies": {
+    "request": "^2.88.2"
+  }
 }
