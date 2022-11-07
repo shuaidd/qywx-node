@@ -69,6 +69,9 @@ exports.httpClient = function (options) {
 
     return {
         httpGet: async function httpGet(appName, uri, params) {
+            if (!params) {
+                params = {}
+            }
             let qry = Object.assign({
                 access_token: await getAccessToken(appName)
             }, params)
