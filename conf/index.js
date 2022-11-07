@@ -1,4 +1,11 @@
-const  request = require('request');
-request("https://www.baidu.com",(error,res,body)=>{
-    console.log(body);
-})
+module.exports = {
+    getConfig: () => {
+        return {
+            url: 'https://qyapi.weixin.qq.com/cgi-bin',
+            corpId: '',
+            secret: '',
+            applications: [],
+            callbacks: []
+        }
+    }
+}
