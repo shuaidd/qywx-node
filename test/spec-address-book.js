@@ -1,13 +1,13 @@
 const {corpApi} = require("../src/index");
-const {user} = require("../src/address-book/user");
 const conf = require('../conf').getConfig()
 
 const api = corpApi(conf)
 
 const userApi = api.addressBook.userApi;
 const deptApi = api.addressBook.deptApi;
+const tagApi = api.addressBook.tagApi;
 
-const APP_NAME = 'address_book';
+const APP_NAME = 'address-book';
 /**
  * 测试创建用户
  */
@@ -151,6 +151,21 @@ const APP_NAME = 'address_book';
 //     console.log(res)
 // })
 
-deptApi.getDeptDetail(APP_NAME,1).then(function (res) {
+// deptApi.getDeptDetail(APP_NAME,1).then(function (res) {
+//     console.log(res)
+// })
+
+// tagApi.getTagList(APP_NAME).then(function (res) {
+//     console.log(res)
+// })
+
+tagApi.getTagDetail(APP_NAME, 3).then(function (res) {
     console.log(res)
 })
+
+// tagApi.updateTag(APP_NAME,{
+//     "tagid": 3,
+//     "tagname": "UI design"
+// }).then(function (res) {
+//     console.log(res)
+// })
