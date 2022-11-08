@@ -47,8 +47,8 @@ exports.httpClient = function (options) {
      */
     async function getAccessToken(appName) {
 
-        if (appName) {
-            return 'D4_gCV7-HzdxbwQhyFv723WdnA2mplhY3kQIZxKzfsYJGPBuzQ-QozvmclzfL_R7iP1M6z05PNClU6srd7TvclZZgyyp_HbOfjjQt1JL4NpZZ75fkpfl0YXgg3JGMue1GvXihs90YM487jgmOR5lUeHa5M5XE9EATiJjwfLB1et9i3hxjC5935w_Wptk0OtuC1EO5M3SGwL7EoifD3bXTA';
+        if (!appName) {
+            return 'nw2Xpu8wW8U_GE6fbCN4TS3jKdfVdC7PjAD8ZUqmhIC828j3qVAq-posuhA7sYoDQYSGuBSE2rXauOZ10xmjRAc3pvF8tA6pzqiqjY0ZJy9e12PxglTRYdg94ZN4PSYl2WztcqwUbrP5Utwfd2djufcuCzgdks67zHAqo34t1h1U9A1ZrtR-ulxnVHnQ37zQzw4oCd84hlAPkAmHdBAwOw';
         }
 
         let response = await rp(Object.assign({
@@ -77,7 +77,6 @@ exports.httpClient = function (options) {
                 access_token: await getAccessToken(appName)
             }, params)
 
-            console.log('查询的参数信息--',qry)
             return rp(Object.assign({
                 uri: uri,
                 qs: qry,
@@ -91,8 +90,6 @@ exports.httpClient = function (options) {
                 method: 'POST',
                 body: data
             }, defaultOptions)
-
-            console.log('查询的参数信息--',params)
 
             return rp(params)
         },
