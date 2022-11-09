@@ -90,6 +90,26 @@ exports.httpClient = function (options) {
         return response.access_token
     }
 
+    function removeAccessToken(appName) {
+        if (options.useRedis && redisClient) {
+            let redisKey = `qywx-node-access-token-${appName}`;
+            redisClient.del(redisKey)
+        }
+    }
+
+    function checkResponse(appName,response) {
+        if (response.errcode === 0) {
+            return true;
+        }
+
+        if (options.useRedis && redisClient && (response.errcode === 42001 || response.errcode === 40014)) {
+            //access_token过期
+            removeAccessToken(appName)
+        }
+
+        return false;
+    }
+
     return {
         httpGet: async function httpGet(appName, uri, params) {
             if (!params) {
@@ -98,11 +118,20 @@ exports.httpClient = function (options) {
             let qry = Object.assign({
                 access_token: await getAccessToken(appName)
             }, params)
-
-            return rp(Object.assign({
-                uri: uri,
-                qs: qry,
-            }, defaultOptions))
+            return new Promise((resolve, reject) => {
+                rp(Object.assign({
+                    uri: uri,
+                    qs: qry,
+                }, defaultOptions)).then(function (res) {
+                    if (checkResponse(appName,res)){
+                        resolve(res)
+                    } else {
+                        reject(res)
+                    }
+                }).catch(err=>{
+                    reject(err)
+                })
+            })
         },
         httpPost: async function httpPost(appName, uri, data) {
             let accessToken = await getAccessToken(appName)
@@ -113,7 +142,17 @@ exports.httpClient = function (options) {
                 body: data
             }, defaultOptions)
 
-            return rp(params)
+            return new Promise((resolve, reject) => {
+                rp(params).then(function (res) {
+                    if (checkResponse(appName,res)){
+                        resolve(res)
+                    } else {
+                        reject(res)
+                    }
+                }).catch(err=>{
+                    reject(err)
+                })
+            })
         },
         submitFormData: async function(appName,uri,formData) {
             let accessToken = await getAccessToken(appName)
@@ -126,9 +165,20 @@ exports.httpClient = function (options) {
                 },
                 formData,
             }, defaultOptions)
-            return rp(params)
+            return new Promise((resolve, reject) => {
+                rp(params).then(function (res) {
+                    if (checkResponse(appName,res)){
+                        resolve(res)
+                    } else {
+                     reject(res)
+                    }
+                }).catch(err=>{
+                    reject(err)
+                })
+            })
         },
         getAccessToken: getAccessToken,
+        removeAccessToken: removeAccessToken,
         getUrl: async function (appName, uri) {
             let accessToken = await getAccessToken(appName)
             return `${options.url}${uri}?access_token=${accessToken}`

@@ -12,6 +12,8 @@ async function optRedis() {
     });
     const value = await client.get('ddshuai1');
     console.log(value);
+
+    await client.del('ddshuai1');
     await client.disconnect();
 }
 

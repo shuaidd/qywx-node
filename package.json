@@ -4,6 +4,7 @@
   "description": "企业微信API客户端",
   "main": "index.js",
   "scripts": {
+    "dev": "cross-env NODE_DEBUG=request node test/spec-message.js",
     "test": "node test/spec-message.js"
   },
   "repository": {
@@ -26,6 +27,9 @@
     "redis": "^4.4.0",
     "request": "^2.88.2",
     "request-promise": "^4.2.6"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   },
   "files": [
     "index.js",
