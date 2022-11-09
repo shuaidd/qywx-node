@@ -1,12 +1,24 @@
 const rp = require('request-promise');
+const { createClient } = require('redis');
 
 exports.httpClient = function (options) {
 
+    let redisClient = null;
     if (!options) {
         options = {};
     } else {
         if (!options.corpId || !options.applications) {
             throw new Error('缺少企业微信应用配置信息')
+        }
+
+        if (options.redis && options.useRedis) {
+            redisClient = createClient(options.redis);
+
+            redisClient.on('error', (err) => console.log('Redis Client Error', err));
+
+            redisClient.connect().then(res=>{
+                console.log('redis connection established')
+            })
         }
     }
 
@@ -46,8 +58,13 @@ exports.httpClient = function (options) {
      */
     async function getAccessToken(appName) {
 
-        if (!appName) {
-            return 'nw2Xpu8wW8U_GE6fbCN4TS3jKdfVdC7PjAD8ZUqmhIC828j3qVAq-posuhA7sYoDQYSGuBSE2rXauOZ10xmjRAc3pvF8tA6pzqiqjY0ZJy9e12PxglTRYdg94ZN4PSYl2WztcqwUbrP5Utwfd2djufcuCzgdks67zHAqo34t1h1U9A1ZrtR-ulxnVHnQ37zQzw4oCd84hlAPkAmHdBAwOw';
+        let redisKey = `qywx-node-access-token-${appName}`;
+        if (options.useRedis && redisClient) {
+            let accessToken = await redisClient.get(redisKey)
+            if (accessToken) {
+                console.log('从缓存获取企业微信的token')
+                return accessToken;
+            }
         }
 
         let response = await rp(Object.assign({
@@ -61,6 +78,12 @@ exports.httpClient = function (options) {
         if (response.errcode !== 0) {
             console.log('获取企业微信的token失败-->', response)
         } else {
+            if (options.useRedis && redisClient) {
+                redisClient.set(redisKey, response.access_token,{
+                    EX: 7200
+                });
+            }
+
             console.log('成功获取企业微信的token-->', response.access_token)
         }
 
@@ -109,6 +132,11 @@ exports.httpClient = function (options) {
         getUrl: async function (appName, uri) {
             let accessToken = await getAccessToken(appName)
             return `${options.url}${uri}?access_token=${accessToken}`
+        },
+        destroy: function () {
+            if (redisClient) {
+                redisClient.disconnect()
+            }
         }
     }
 }

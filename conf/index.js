@@ -17,7 +17,9 @@ module.exports = {
                     agentId: '1000009'
                 }
             },
-            callbacks: []
+            callbacks: [],
+            useRedis: true,
+            redis: {}
         }
     }
 }

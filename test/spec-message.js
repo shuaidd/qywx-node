@@ -18,4 +18,5 @@ const APP_NAME = 'report';
 
 api.message.revokeMessage(APP_NAME, {msgid: 'Dv0oBVNA9p2BIWPODPqgklVRv7YISONp8FXLt8m9XX3toBnEa_MhnxH0VnmSWe4krGkjyqgwdHYsoD3NFTsP3A'}).then(function(res) {
     console.log(res)
+    api.destroy()
 })

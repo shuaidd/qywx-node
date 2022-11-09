@@ -9,6 +9,7 @@ exports.corpApi = function(options) {
         addressBook: addressBook(client),
         getAccessToken: client.getAccessToken,
         media: media(client),
-        message: message(client)
+        message: message(client),
+        destroy: client.destroy
     }
 }
