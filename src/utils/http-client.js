@@ -1,5 +1,4 @@
 const rp = require('request-promise');
-const request = require('request');
 
 exports.httpClient = function (options) {
 

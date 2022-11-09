@@ -1,4 +1,4 @@
-const {httpClient} = require('../utils/http-client')
+const {httpClient} = require('./utils/http-client')
 const {addressBook} = require('../src/address-book')
 const {media} = require('../src/media')
 const {message} = require('../src/message')
